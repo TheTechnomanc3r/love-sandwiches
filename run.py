@@ -10,7 +10,7 @@ SCOPE = [
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('love_sandwiches') 
+SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
 
 def get_sales_data():
@@ -35,7 +35,7 @@ def get_sales_data():
 
     return sales_data
 
-                
+
 def validate_data(values):
     """
     Inside the try, converts all string values into integers.
@@ -55,5 +55,16 @@ def validate_data(values):
 
     return True        
 
+def update_sales_worksheet(data):
+    """
+    update sales worksheet, add new row with the list data provided.
+    """
+    print("Updating Sales Worksheet... \n")
+    sales_worksheet = SHEET.worksheet("sales")
+    sales_worksheet.append_row(data)
+    print("Sales worksheet updated successfully.\n")
+
+
 data = get_sales_data()
-print(data)
+sales_data = [int(num) for num in data]
+update_sales_worksheet(sales_data)
